@@ -1,0 +1,28 @@
+name: Football
+version: 1.0.12
+main: tr.voseraproject.football.FootballPlugin
+api-version: '1.21'
+author: VoseraProject
+description: Multi-arena football minigame for Spigot/Paper 1.21-1.21.1
+depend: [PlaceholderAPI]
+softdepend: [TAB]
+
+commands:
+  football:
+    description: Football ana komutu
+    aliases: [fb]
+    usage: /fb help
+
+permissions:
+  football.admin:
+    description: Football yönetim komutları
+    default: op
+  football.join:
+    description: Arenaya katılma
+    default: true
+  football.spectate:
+    description: Maç izleme
+    default: true
+  football.top:
+    description: Sıralamayı görüntüleme
+    default: true

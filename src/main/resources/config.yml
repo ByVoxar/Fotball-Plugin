@@ -1,0 +1,278 @@
+# Football 1.0.10 - Spigot/Paper 1.21-1.21.1
+# Tüm süre değerleri saniye, fizik cooldown değerleri tick cinsindedir.
+# Renkler: &a / &l / &r, &#RRGGBB, &x&R&R&G&G&B&B, <#RRGGBB>, {#RRGGBB>,
+# #RRGGBB ve <red>/<blue>/<bold>/<reset> gibi basit etiketler desteklenir.
+
+match:
+  start-delay-seconds: 10
+  duration-seconds: 300
+  goal-limit: 5
+  default-min-players: 2
+  default-max-players: 14
+  goal-reset-delay-ticks: 40
+
+  # Normal süre berabere biterse (örn. 4-4) uzatma başlar.
+  # Uzatma yalnızca 1 kez verilir. Uzatma sonunda da eşitse maç berabere biter.
+  regular-time-display-name: "&aNormal Süre"
+  overtime:
+    enabled: true
+    duration-seconds: 300
+    # true ise uzatma başladığında goal-limit maçı erken bitirmez; tam uzatma süresi oynanır.
+    ignore-goal-limit: true
+    display-name: "&#FFD84D&lUZATMA"
+
+
+# Gol atan oyuncunun hemen üstünde hasarsız görsel havai fişek patlar.
+goal-celebration:
+  firework:
+    enabled: true
+    height: 2.6
+    detonate-delay-ticks: 1
+    type: BALL_LARGE
+    flicker: true
+    trail: true
+    # RGB biçimi: R,G,B
+    red-color: "255,55,55"
+    blue-color: "55,110,255"
+    fade-color: "255,255,255"
+
+ball:
+  material: SLIME_BLOCK
+  custom-model-data: 0
+  transform: FIXED
+  physics:
+    normal-hit-force: 0.85
+    shift-hit-force: 1.05
+    upward-force: 0.62
+    gravity: 0.045
+    air-drag: 0.985
+    ground-friction: 0.90
+    bounce-factor: 0.55
+    max-speed: 2.40
+    contact-radius: 1.35
+    hit-cooldown-ticks: 6
+    # Top arenadan çok uzaklaşırsa/boşluğa düşerse spawn noktasına döner.
+    reset-distance: 80.0
+  particle:
+    enabled: true
+    type: CRIT
+    count: 2
+    minimum-speed: 0.08
+    dust:
+      red: 255
+      green: 255
+      blue: 255
+      size: 1.0
+
+
+
+# Arena içi sohbet tamamen arena üyelerine özeldir.
+chat:
+  enabled: true
+  # true: Arena içindekiler dışarıdaki global sohbeti de görmez.
+  isolate-global-chat: true
+  log-to-console: true
+  allow-player-color-codes: false
+  format: "&8[&6%arena%&8] %team% &f%player% &8» &f%message%"
+  spectator-format: "&8[&6%arena%&8] &7[İzleyici] &f%player% &8» &7%message%"
+  spectator-label: "&7İzleyici"
+
+# TAB header/footer yalnızca arena içindeki oyuncunun ekranına uygulanır.
+# Takım prefixleri arena scoreboard'u üzerinden TAB isimlerine yansır.
+tab:
+  enabled: true
+  # Başka bir TAB eklentisi Football görünümünü ezmeye çalışırsa arena TAB'ını
+  # tekrar uygular. NEZNAMY/TAB kuruluysa otomatik olarak onun API'si kullanılır.
+  force-refresh-ticks: 5
+  spectator-name: "&7İzleyici"
+  player-name: "&f%player%"
+
+  # Arena oyuncularının TAB satırları takımına göre özel görünür.
+  # Prefix/suffix scoreboard üzerinden sadece bu arena arayüzünü kullanan oyunculara uygulanır.
+  team-prefix:
+    red: "&c&lKIRMIZI &8│ &f"
+    blue: "&9&lMAVİ &8│ &f"
+    spectator: "&7&lİZLEYİCİ &8│ &f"
+  team-suffix:
+    red: " &8│ &c%red%"
+    blue: " &8│ &9%blue%"
+    spectator: " &8│ &7SPEC"
+
+  header:
+    - " "
+    - "&6&lFOOTBALL"
+    - "&8"
+    - "&7Arena &8» &f%arena%"
+    - "&#FF4B4B&l%red% &8- &#4B7BFF&l%blue% &8• &#FFD84D%time%"
+    - "&7Devre &8» %phase%"
+  footer:
+    - "&8"
+    - "&7Takımın &8» %team%"
+    - "&7Oyuncu &8» &f%players%/%max% &8• &7İzleyici &8» &f%spectators%"
+    - " "
+
+scoreboard:
+  enabled: true
+  update-ticks: 20
+  title: "&#FFD84D&lFOOTBALL"
+  waiting-time-text: "Bekliyor"
+  overtime-state-text: "&#FFD84D&lUzatma"
+  lines:
+    - "&7Arena: &f%arena%"
+    - " "
+    - "&cKırmızı: &f%red%"
+    - "&9Mavi: &f%blue%"
+    - "  "
+    - "&7Süre: &f%time%"
+    - "&7Devre: %phase%"
+    - "&7Durum: &f%state%"
+    - "&7Takım: %team%"
+    - "   "
+    - "&7Oyuncular: &f%players%/%max%"
+    - "&7İzleyici: &f%spectators%"
+
+teams:
+  red:
+    display-name: "&#FF3B3B&lKırmızı"
+    plain-name: "KIRMIZI"
+  blue:
+    display-name: "&#3B6CFF&lMavi"
+    plain-name: "MAVİ"
+
+# Arena içindeki oyuncunun kafa üstü adı ve Bukkit displayName değeri.
+# TAB satırı ayrı olarak yukarıdaki "tab" bölümünden yönetilir.
+name-tag:
+  enabled: true
+  # Kafa üstünde takım adı + oyuncu adı görünür.
+  # Örnek: [KIRMIZI] Oyuncu / [MAVİ] Oyuncu
+  prefix:
+    red: "&#FF3B3B&l[KIRMIZI] &#FF6B6B"
+    blue: "&#3B6CFF&l[MAVİ] &#6B8CFF"
+    spectator: "&7&l[İZLEYİCİ] &f"
+  suffix:
+    red: ""
+    blue: ""
+    spectator: ""
+  display-name:
+    red: "&#FF3B3B&l[KIRMIZI] &#FF6B6B%player%"
+    blue: "&#3B6CFF&l[MAVİ] &#6B8CFF%player%"
+    spectator: "&7&l[İZLEYİCİ] &f%player%"
+
+# Maç sonu ödülleri konsol komutları ile verilir.
+# İstediğin ekonomi/crate/item eklentisinin komutunu buraya yazabilirsin.
+# Placeholderlar: %player%, %uuid%, %arena%, %team%, %red%, %blue%
+rewards:
+  winner:
+    enabled: true
+    commands:
+      - "give %player% emerald 5"
+      # Ekonomi kullanıyorsan örnek: "eco give %player% 100"
+    messages:
+      - "&8[&6Football&8] &aKazandığın için &e5 Zümrüt &akazandın!"
+  draw:
+    enabled: true
+    commands:
+      - "give %player% emerald 2"
+      # Ekonomi kullanıyorsan örnek: "eco give %player% 40"
+    messages:
+      - "&8[&6Football&8] &eMaç berabere bitti. &f2 Zümrüt &ekazandın!"
+
+# Oyuncunun gerçek zırhı arenaya girerken snapshot'a alınır.
+# Arena içinde takım renginde geçici deri set giydirilir ve çıkışta eski zırh geri gelir.
+team-armor:
+  enabled: true
+  lock-inventory: true
+  # #RRGGBB veya R,G,B biçimi kullanılabilir.
+  red-color: "#FF3B3B"
+  blue-color: "#3B6CFF"
+
+goal-selection:
+  wand-material: GOLDEN_HOE
+  wand-name: "&6Football Kale Seçim Aracı"
+  instant-region:
+    half-width: 2
+    height: 3
+    half-depth: 1
+
+sign:
+  line-1: "&6[Football]"
+  line-2: "&f%arena%"
+  line-3: "&a%players%&7/&c%max%"
+  line-4: "&e%state%"
+  states:
+    waiting: "Bekliyor"
+    running: "Maçta"
+    ending: "Bitiyor"
+
+messages:
+  prefix: "&8[&6Football&8] &r"
+  no-permission: "&cBu işlem için yetkin yok."
+  player-only: "&cBu komutu sadece oyuncular kullanabilir."
+  arena-created: "&a'%arena%' arenası oluşturuldu."
+  arena-exists: "&c'%arena%' adında bir arena zaten var."
+  arena-deleted: "&a'%arena%' arenası silindi."
+  arena-not-found: "&c'%arena%' arenası bulunamadı."
+  invalid-number: "&cGeçerli bir sayı gir."
+  invalid-team: "&cTakım red veya blue olmalı."
+  goal-world-mismatch: "&cİki kale köşesi aynı dünyada olmalı."
+  top-empty: "&7Henüz veri yok."
+  usage:
+    join: "&cKullanım: /fb join <arena>"
+    spectate: "&cKullanım: /fb spectate <arena>"
+    create: "&cKullanım: /fb create <arena>"
+    delete: "&cKullanım: /fb delete <arena>"
+    team: "&cKullanım: /fb team <arena> <red/blue> spawn"
+    ballspawn: "&cKullanım: /fb ballspawn <arena>"
+    setgoal: "&cKullanım: /fb setgoal <arena> <red/blue>"
+    sign: "&cKullanım: /fb sign <arena>"
+    minplayers: "&cKullanım: /fb minplayers <arena> <sayı>"
+    maxplayers: "&cKullanım: /fb maxplayers <arena> <sayı>"
+  setup-incomplete: "&cArena kurulumu tamamlanmamış. Kırmızı/Mavi spawn, top spawn ve iki kale gerekli."
+  minplayers-set: "&a%arena% minimum oyuncu sayısı &e%value% &aolarak ayarlandı."
+  maxplayers-set: "&a%arena% maksimum oyuncu sayısı &e%value% &aolarak ayarlandı."
+  team-spawn-set: "&a%arena% için %team% takım spawnı ayarlandı."
+  ball-spawn-set: "&a%arena% top spawn noktası ayarlandı."
+  goal-selection-started: "&e%team% kale seçimi başladı. Sol tık: 1. köşe, sağ tık: 2. köşe."
+  goal-pos1-set: "&a1. köşe seçildi: &f%x%, %y%, %z%"
+  goal-pos2-set: "&a2. köşe seçildi: &f%x%, %y%, %z%"
+  goal-set: "&a%arena% için %team% kale alanı kaydedildi."
+  goal-instant-set: "&a%arena% için %team% kale alanı bulunduğun konum çevresinde oluşturuldu."
+  sign-set: "&aTabela %arena% arenasına bağlandı."
+  look-at-sign: "&cEn fazla 6 blok uzaklıktaki bir tabelaya bakmalısın."
+  already-in-arena: "&cZaten bir Football arenasındasın."
+  arena-full: "&cBu arena dolu."
+  match-already-running: "&cBu arenada maç zaten başladı. İzlemek için /fb spectate %arena% kullan."
+  joined: "&a%arena% arenasına katıldın. Takımın: %team%"
+  player-joined-broadcast: "&e%player% &7arenaya katıldı. &f(%players%/%max%)"
+  left: "&eArenadan ayrıldın."
+  not-in-arena: "&cHerhangi bir arenada değilsin."
+  match-starting: "&eYeterli oyuncu bulundu. Maç &f%seconds% &esaniye içinde başlayacak."
+  match-started: "&aMaç başladı! &cKırmızı &7vs &9Mavi"
+  waiting-players: "&eMaçın başlaması için oyuncu bekleniyor: &f%players%/%min%"
+  spectating: "&a%arena% arenasındaki maçı izliyorsun."
+  spectate-not-running: "&cBu arenada aktif maç yok."
+  goal-title: "&6GOL!"
+  goal-subtitle: "&f%player% &eGol Attı! &8- &c%red% &7: &9%blue%"
+  goal-subtitle-no-player: "&eGol! &8- &c%red% &7: &9%blue%"
+  winner-title: "&6MAÇ BİTTİ"
+  winner-subtitle-red: "&cKırmızı takım kazandı! &f%red% &7- &f%blue%"
+  winner-subtitle-blue: "&9Mavi takım kazandı! &f%blue% &7- &f%red%"
+  winner-subtitle-draw: "&eBerabere! &f%red% &7- &f%blue%"
+  time-ended: "&eNormal süre sona erdi."
+  overtime-started: "&#FFD84D&lBERABERE! &eSkor %red%-%blue%. Maça +%minutes% dakika uzatma eklendi."
+  overtime-title: "&#FFD84D&lUZATMA"
+  overtime-subtitle: "&fSkor &c%red% &7- &9%blue% &8• &e+%minutes% dakika"
+  overtime-ended: "&#FFD84DUzatma sona erdi. &fSkor: &c%red% &7- &9%blue%"
+  arena-aborted: "&cMaç yeterli oyuncu kalmadığı için iptal edildi."
+  reload: "&aFootball config yeniden yüklendi."
+  top-header: "&6&lFootball TOP 10"
+  top-goals-header: "&eEn Çok Gol"
+  top-wins-header: "&aEn Çok Galibiyet"
+  top-line: "&7%rank%. &f%name% &8- &e%value%"
+  help:
+    - "&6&lFootball Komutları"
+    - "&e/fb join <arena> &7- Arenaya katıl"
+    - "&e/fb leave &7- Arenadan ayrıl"
+    - "&e/fb spectate <arena> &7- Aktif maçı izle"
+    - "&e/fb top &7- TOP 10 sıralama"
+    - "&cYönetici: /fb create|delete|team|ballspawn|setgoal|sign|minplayers|maxplayers|reload"
