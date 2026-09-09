@@ -2,7 +2,7 @@ name: Football
 version: 1.0.12
 main: tr.voseraproject.football.FootballPlugin
 api-version: '1.21'
-author: VoseraProject
+author: ByVoxar
 description: Multi-arena football minigame for Spigot/Paper 1.21-1.21.1
 depend: [PlaceholderAPI]
 softdepend: [TAB]
